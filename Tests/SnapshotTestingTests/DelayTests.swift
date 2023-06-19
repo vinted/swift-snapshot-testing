@@ -2,14 +2,24 @@ import XCTest
 @testable import SnapshotTesting
 
 class DelayTests: XCTestCase {
-  func testDelayViewDidLoad() {
-    let  sut = DelayedViewController()
-    
-      assertSnapshot(matching: sut, as: .image(on: .iPhone13, delay: 2))
-  }
+    func testDelayViewDidLoad() {
+        let  sut = DelayedViewController()
+        
+        assertSnapshot(matching: sut, as: .image(on: .iPhone13, delay: 2))
+    }
+    func testViewDidLoad() {
+        let  sut = DelayedViewController()
+        
+        assertSnapshot(matching: sut, as: .image(on: .iPhone13))
+    }
+    func testWaitViewDidLoad() {
+        let  sut = DelayedViewController()
+        
+        assertSnapshot(matching: sut, as: .wait(for: 2, on: .image(on: .iPhone13)))
+    }
 }
 
-final class DelayedViewController: UIViewController {
+private final class DelayedViewController: UIViewController {
     
     private lazy var topLabel = UILabel()
     private lazy var bottomLabel = UILabel()
@@ -39,10 +49,10 @@ final class DelayedViewController: UIViewController {
         bottomLabel.text = "Hello viewDidAppear"
         topLabel.translatesAutoresizingMaskIntoConstraints = false
         bottomLabel.translatesAutoresizingMaskIntoConstraints = false
-
+        
         view.addSubview(topLabel)
         view.addSubview(bottomLabel)
-
+        
         NSLayoutConstraint.activate([
             topLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             topLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
